@@ -5,23 +5,25 @@
 #include <Syslog.h>
 #include <WiFiUdp.h>
 
-const char* ssid = "Briarhill";
-const char* password = "12221222";
-const int  buttonPin = D2;
-const int  relayPin = D6;
+
+//Network Configuration
+const char* ssid = "YOUR_WIFI_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
 const String clientName = "GarageDoorSensor";
 
-#define REPORT_INTERVAL 2 // in sec
-#define UPDATE_INTERVAL 30 // in seconds multiplied by REPORT_INTERVAL
-
-// Syslog server connection info
+// Syslog server connection configuration
 #define SYSLOG_SERVER "192.168.0.161"
 #define SYSLOG_PORT 514
-
-// This device info
 #define DEVICE_HOSTNAME "GarageDoorSensor"
 #define APP_NAME "GarageDoor"
 
+// Hardware / Reporting Configuration
+#define REPORT_INTERVAL 2 // in sec
+#define UPDATE_INTERVAL 30 // in seconds multiplied by REPORT_INTERVAL
+const int  buttonPin = D2;
+const int  relayPin = D6;
+
+//MQTT Configuration
 char* topic = "/sensors/doors/garage";
 char* server = "192.168.0.161";
 char* hellotopic = "sensors/hello";
@@ -32,7 +34,6 @@ WiFiClient wifiClient;
 WiFiUDP udpClient;
 
 Syslog syslog(udpClient, SYSLOG_PROTO_IETF);
-
 
 void callback(char* topic, byte* payload, unsigned int length) {
   // handle message arrived
@@ -50,7 +51,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 PubSubClient client(server, 1883, callback, wifiClient);
 
 void connectWiFi(){
-  WiFi.hostname("GarageDoorSensor");
+  WiFi.hostname(clientName);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
 
