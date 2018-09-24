@@ -183,6 +183,7 @@ void sendGarageStatusMQTT(String garageState){
   sendMQTTData(payload);
 }
 
+
 void setup() {
   pinMode(buttonPin, INPUT);
   pinMode (relayPin, OUTPUT);
@@ -236,6 +237,7 @@ void loop() {
   if (updateCounter <= 0){
     syslog.log(LOG_INFO, "Sending status update");
     sendGarageStatusMQTT(garageState);
+    updateCounter=UPDATE_INTERVAL;
   }
 
   if (buttonState != lastState){
